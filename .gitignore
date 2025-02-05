@@ -140,3 +140,5 @@ dmypy.json
 
 # galaxy-importer
 importer_result.json
+
+.idea
