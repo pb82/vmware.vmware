@@ -1,7 +1,7 @@
 ---
 # VMs
 vmware.vmware.guest_info:
-  query: >- <invalid>
+  query: >-
     .guests[] | {
       name: (.moid + "-" + .instance_uuid),
       canonical_facts: {
