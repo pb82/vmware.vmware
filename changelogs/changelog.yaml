@@ -19,6 +19,78 @@ releases:
     fragments:
     - 16-vm_list_group_by_clusters.yml
     release_date: '2024-05-16'
+  1.10.0:
+    changes:
+      minor_changes:
+      - cluster_ha - migrate the vmware_cluster_ha module from community to here
+      - deploy_content_library_ovf - migrate the vmware_content_deploy_ovf_template
+        module from community to here
+      - deploy_content_library_ovf - update parameters to be consistent with other
+        deploy modules
+      - deploy_content_library_template - migrate the vmware_content_deploy_template
+        module from community to here
+      - deploy_content_library_template - update parameters to be consistent with
+        other deploy modules
+      - deploy_folder_template - add module to deploy a vm from a template in a vsphere
+        folder
+      - esxi_connection - migrate the vmware_host module from community to here
+      - esxi_host - migrate the vmware_host module from community to here
+      - folder - migrate vmware_folder module from community to here
+      - local_content_library - migrate the vmware_content_library_manager module
+        from community to here
+      - subscribed_content_library - migrate the vmware_content_library_manager module
+        from community to here
+    fragments:
+    - 103-migrate-vmware_folder.yml
+    - 104-migrate-cluster-ha.yml
+    - 105-add-event-counting-file.yml
+    - 108-migrate-deploy_content_library.yml
+    - 109-migrate-vmware_content_manager.yml
+    - 111-migrate-vmware_host.yml
+    - 113-add-deploy-folder-template-module.yml
+    release_date: '2025-02-17'
+  1.10.1:
+    changes:
+      bugfixes:
+      - folder - replaced non-existent 'storage' type with 'datastore' type
+      - module_deploy_vm_base - fix attribute error when deploying to a resource pool
+    fragments:
+    - 121-fix-bugs-in-new-modules.yml
+    release_date: '2025-02-20'
+  1.11.0:
+    changes:
+      bugfixes:
+      - vms inventory - fix handling of VMs within VApps
+      minor_changes:
+      - _module_pyvmomi_base - Make sure to use the folder param when searching for
+        VMs based on other common params in get_vms_using_params
+      - added vm_resource_info module to collect cpu/memory facts about vms
+      - clients/_pyvmomi - adds explicit init params instead of using dict
+      - clients/_rest - adds explicit init params instead of using dict
+      - esxi_hosts - Add inventory host filtering based on jinja statements
+      - esxi_hosts inventory - include moid property in output always
+      - vm_powerstate - migrate vmware_guest_powerstate module from community to here
+      - pyvmomi - update object search by name method to use propertycollector, which
+        speeds up results significantly
+      - upload_content_library_ovf - Add module to upload an ovf/ova to a content
+        library
+      - vms - Add inventory host filtering based on jinja statements
+      - vms inventory - include moid property in output always
+    fragments:
+    - 114-migrate-vmware_guest_powerstate.yml
+    - 120-optimize-search.yml
+    - 123-fix-galaxy-import-warnings.yml
+    - 127-add-maintainer-docs.yml
+    - 128-add-resource-info-functionality.yml
+    - 130-add-host-filtering-to-invens.yml
+    - 131-update-query-file.yml
+    - 132-add-explicit-client-params.yml
+    - 135-add-moid-to-inven-out.yml
+    - 138-add-ovf-upload-module.yml
+    - 139-fix-inventory-plugin-vapps.yml
+    - 141-add-folder-param-to-get-vm.yml
+    - 142-add-longer-wait-to-esxi-tests.yml
+    release_date: '2025-03-26'
   1.2.0:
     changes:
       bugfixes:

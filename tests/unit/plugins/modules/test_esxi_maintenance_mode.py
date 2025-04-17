@@ -8,13 +8,13 @@ from ansible_collections.vmware.vmware.plugins.modules.esxi_maintenance_mode imp
     EsxiMaintenanceModeModule,
     main as module_main
 )
-from ansible_collections.vmware.vmware.plugins.module_utils.clients._pyvmomi import (
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import (
     PyvmomiClient
 )
-from .common.utils import (
+from ...common.utils import (
     AnsibleExitJson, ModuleTestCase, set_module_args,
 )
-from .common.vmware_object_mocks import (
+from ...common.vmware_object_mocks import (
     MockEsxiHost
 )
 

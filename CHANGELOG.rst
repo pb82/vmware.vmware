@@ -4,6 +4,56 @@ vmware.vmware Release Notes
 
 .. contents:: Topics
 
+v1.11.0
+=======
+
+Minor Changes
+-------------
+
+- _module_pyvmomi_base - Make sure to use the folder param when searching for VMs based on other common params in get_vms_using_params
+- added vm_resource_info module to collect cpu/memory facts about vms
+- clients/_pyvmomi - adds explicit init params instead of using dict
+- clients/_rest - adds explicit init params instead of using dict
+- esxi_hosts - Add inventory host filtering based on jinja statements
+- esxi_hosts inventory - include moid property in output always
+- vm_powerstate - migrate vmware_guest_powerstate module from community to here
+- pyvmomi - update object search by name method to use propertycollector, which speeds up results significantly
+- upload_content_library_ovf - Add module to upload an ovf/ova to a content library
+- vms - Add inventory host filtering based on jinja statements
+- vms inventory - include moid property in output always
+
+Bugfixes
+--------
+
+- vms inventory - fix handling of VMs within VApps
+
+v1.10.1
+=======
+
+Bugfixes
+--------
+
+- folder - replaced non-existent 'storage' type with 'datastore' type
+- module_deploy_vm_base - fix attribute error when deploying to a resource pool
+
+v1.10.0
+=======
+
+Minor Changes
+-------------
+
+- cluster_ha - migrate the vmware_cluster_ha module from community to here
+- deploy_content_library_ovf - migrate the vmware_content_deploy_ovf_template module from community to here
+- deploy_content_library_ovf - update parameters to be consistent with other deploy modules
+- deploy_content_library_template - migrate the vmware_content_deploy_template module from community to here
+- deploy_content_library_template - update parameters to be consistent with other deploy modules
+- deploy_folder_template - add module to deploy a vm from a template in a vsphere folder
+- esxi_connection - migrate the vmware_host module from community to here
+- esxi_host - migrate the vmware_host module from community to here
+- folder - migrate vmware_folder module from community to here
+- local_content_library - migrate the vmware_content_library_manager module from community to here
+- subscribed_content_library - migrate the vmware_content_library_manager module from community to here
+
 v1.9.0
 ======
 

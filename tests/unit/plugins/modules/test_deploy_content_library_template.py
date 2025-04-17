@@ -8,16 +8,16 @@ from ansible_collections.vmware.vmware.plugins.modules.deploy_content_library_te
     VmwareContentDeployTemplate,
     main as module_main
 )
-from ansible_collections.vmware.vmware.plugins.module_utils.clients._pyvmomi import (
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import (
     PyvmomiClient
 )
-from ansible_collections.vmware.vmware.plugins.module_utils.clients._rest import (
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.rest import (
     VmwareRestClient
 )
-from .common.utils import (
+from ...common.utils import (
     AnsibleExitJson, ModuleTestCase, set_module_args,
 )
-from .common.vmware_object_mocks import (
+from ...common.vmware_object_mocks import (
     MockVmwareObject
 )
 
@@ -37,7 +37,6 @@ class TestDeployContentLibraryTemplate(ModuleTestCase):
         mocker.patch.object(VmwareContentDeployTemplate, 'get_datastore_by_name_or_moid', return_value=MockVmwareObject())
         mocker.patch.object(VmwareContentDeployTemplate, 'get_datacenter_by_name_or_moid', return_value=MockVmwareObject())
         mocker.patch.object(VmwareContentDeployTemplate, 'deploy', return_value=self.test_vm._GetMoId())
-        mocker.patch.object(VmwareContentDeployTemplate, 'delete_vm', return_value={})
 
     def test_present(self, mocker):
         self.__prepare(mocker)
@@ -58,7 +57,7 @@ class TestDeployContentLibraryTemplate(ModuleTestCase):
             module_main()
 
         assert c.value.args[0]["changed"] is True
-        assert c.value.args[0]["vm_moid"] is self.test_vm._GetMoId()
+        assert c.value.args[0]["vm"]["moid"] is self.test_vm._GetMoId()
 
         mocker.patch.object(VmwareContentDeployTemplate, 'get_deployed_vm', return_value=self.test_vm)
         set_module_args(
@@ -77,38 +76,4 @@ class TestDeployContentLibraryTemplate(ModuleTestCase):
             module_main()
 
         assert c.value.args[0]["changed"] is False
-        assert c.value.args[0]["vm_moid"] is self.test_vm._GetMoId()
-
-    def test_destroy(self, mocker):
-        self.__prepare(mocker)
-        mocker.patch.object(VmwareContentDeployTemplate, 'get_deployed_vm', return_value=self.test_vm)
-        set_module_args(
-            hostname="127.0.0.1",
-            username="administrator@local",
-            password="123456",
-            add_cluster=False,
-            vm_name=self.test_vm.name,
-            datacenter='foo',
-            state='absent'
-        )
-
-        with pytest.raises(AnsibleExitJson) as c:
-            module_main()
-
-        assert c.value.args[0]["changed"] is True
-
-        mocker.patch.object(VmwareContentDeployTemplate, 'get_deployed_vm', return_value=None)
-        set_module_args(
-            hostname="127.0.0.1",
-            username="administrator@local",
-            password="123456",
-            add_cluster=False,
-            vm_name=self.test_vm.name,
-            datacenter='foo',
-            state='absent'
-        )
-
-        with pytest.raises(AnsibleExitJson) as c:
-            module_main()
-
-        assert c.value.args[0]["changed"] is False
+        assert c.value.args[0]["vm"]["moid"] is self.test_vm._GetMoId()

@@ -8,14 +8,14 @@ from ansible_collections.vmware.vmware.plugins.modules.cluster_info import (
     ClusterInfo,
     main as module_main
 )
-from ansible_collections.vmware.vmware.plugins.module_utils.clients._pyvmomi import (
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import (
     PyvmomiClient
 )
 
-from .common.utils import (
+from ...common.utils import (
     AnsibleExitJson, ModuleTestCase, set_module_args
 )
-from .common.vmware_object_mocks import MockCluster
+from ...common.vmware_object_mocks import MockCluster
 
 pytestmark = pytest.mark.skipif(
     sys.version_info < (2, 7), reason="requires python2.7 or higher"

@@ -34,7 +34,7 @@ options:
             - Only used if the O(relative_path) option is used.
         type: str
         required: false
-        choices: [vm, host, storage, network]
+        choices: [vm, host, datastore, network]
     relative_path:
         description:
             - The relative path of the folder to create. The relative path should include neither the datacenter nor the folder type.
@@ -70,7 +70,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Create Folder Using A Relative Path (/DC01/storage/my/test/folder)
+- name: Create Folder Using A Relative Path (/DC01/datastore/my/test/folder)
   vmware.vmware.folder:
     hostname: "https://vcenter"
     username: "username"
@@ -78,7 +78,7 @@ EXAMPLES = r'''
     validate_certs: false
     datacenter: DC01
     relative_path: my/test/folder
-    folder_type: storage
+    folder_type: datastore
 
 # This is the same as the example above, but shows how to do it using different params.
 - name: Create A Folder Using An Absolute Path
@@ -87,7 +87,7 @@ EXAMPLES = r'''
     username: "username"
     password: "password"
     validate_certs: false
-    absolute_path: /DC01/storage/my/test/folder
+    absolute_path: /DC01/datastore/my/test/folder
 
 
 - name: Delete The Folder and All Of Its Contents
@@ -96,9 +96,9 @@ EXAMPLES = r'''
     username: "username"
     password: "password"
     validate_certs: false
-    absolute_path: /DC01/storage/my
+    absolute_path: /DC01/datastore/my
     state: absent
-    remove_vm_data: True
+    remove_vm_data: true
 
 
 - name: Delete A VM Folder But Keep The VM Data Disks
@@ -109,7 +109,7 @@ EXAMPLES = r'''
     validate_certs: false
     absolute_path: /DC01/vm/sql
     state: absent
-    remove_vm_data: False
+    remove_vm_data: false
 '''
 
 RETURN = r'''
@@ -137,13 +137,13 @@ from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.vmware.vmware.plugins.module_utils._module_pyvmomi_base import (
     ModulePyvmomiBase
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_argument_spec import (
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import (
     base_argument_spec
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_folder_paths import (
+from ansible_collections.vmware.vmware.plugins.module_utils._folder_paths import (
     prepend_datacenter_and_folder_type
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_tasks import (
+from ansible_collections.vmware.vmware.plugins.module_utils._vsphere_tasks import (
     TaskError,
     RunningTaskMonitor
 )
@@ -273,7 +273,7 @@ def main():
         argument_spec={
             **base_argument_spec(), **dict(
                 datacenter=dict(type='str', required=False, aliases=['datacenter_name']),
-                folder_type=dict(type='str', choices=['vm', 'host', 'network', 'storage'], required=False),
+                folder_type=dict(type='str', choices=['vm', 'host', 'network', 'datastore'], required=False),
                 relative_path=dict(type='str', required=False),
                 absolute_path=dict(type='str', required=False),
                 state=dict(type='str', default='present', choices=['absent', 'present']),

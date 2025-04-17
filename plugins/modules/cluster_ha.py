@@ -229,19 +229,19 @@ EXAMPLES = r'''
     datacenter: DC01
     cluster: my-cluster
     host_failure_response:
-        restart_vms: true
-        default_vm_restart_priority: low
+      restart_vms: true
+      default_vm_restart_priority: low
     host_isolation_response: powerOff
     admission_control_policy: dedicated_host
     admission_control_dedicated_hosts:
-        - DC0_C0_H0
-        - DC0_C0_H1
+      - DC0_C0_H0
+      - DC0_C0_H1
     vm_monitoring:
-        mode: vmAndAppMonitoring
+      mode: vmAndAppMonitoring
     storage_apd_response:
-        mode: restartConservative
-        delay: 100
-        restart_vms: true
+      mode: restartConservative
+      delay: 100
+      restart_vms: true
     storage_pdl_response_mode: restart
 
 # If you do not set a parameter and it has no default, the module will ignore
@@ -254,11 +254,19 @@ EXAMPLES = r'''
     datacenter: DC01
     cluster: my-cluster
     host_failure_response:
-        restart_vms: true
-        default_vm_restart_priority: low
+      restart_vms: true
+      default_vm_restart_priority: low
 '''
 
 RETURN = r'''
+cluster:
+    description:
+        - Information about the target cluster
+    returned: On success
+    type: dict
+    sample:
+        moid: cluster-79828,
+        name: test-cluster
 result:
     description:
         - Information about the HA config update task, if something changed
@@ -285,14 +293,14 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.vmware.vmware.plugins.module_utils._module_pyvmomi_base import (
     ModulePyvmomiBase
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_argument_spec import (
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import (
     base_argument_spec
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_tasks import (
+from ansible_collections.vmware.vmware.plugins.module_utils._vsphere_tasks import (
     TaskError,
     RunningTaskMonitor
 )
-from ansible_collections.vmware.vmware.plugins.module_utils._vmware_type_utils import (
+from ansible_collections.vmware.vmware.plugins.module_utils._type_utils import (
     diff_dict_and_vmodl_options_set
 )
 from ansible.module_utils.common.text.converters import to_native
@@ -431,7 +439,7 @@ class VmwareCluster(ModulePyvmomiBase):
         if (
             vm_config.vmMonitoring != vm_params["mode"] or
             vm_config.failureInterval != vm_params["failure_interval"] or
-            vm_config.minUpTime != vm_params.get["minimum_uptime"] or
+            vm_config.minUpTime != vm_params["minimum_uptime"] or
             vm_config.maxFailures != vm_params["maximum_resets"] or
             vm_config.maxFailureWindow != vm_params["maximum_resets_window"]
         ):
@@ -739,10 +747,16 @@ def main():
 
     result = dict(
         changed=False,
-        result={}
+        result={},
+        cluster=dict(
+            name="",
+            moid=""
+        )
     )
 
     cluster_ha = VmwareCluster(module)
+    result['cluster']['name'] = cluster_ha.cluster.name
+    result['cluster']['moid'] = cluster_ha.cluster._GetMoId()
 
     config_is_different = cluster_ha.check_ha_config_diff()
     if config_is_different:
