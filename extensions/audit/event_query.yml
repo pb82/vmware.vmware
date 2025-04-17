@@ -1,6 +1,6 @@
 ---
 # VMs
-vmware.vmware.*:
+vmware.vmware.guest_info:
   query: >-
     .guests[] | {
       name: (.moid + "-" + .instance_uuid),
